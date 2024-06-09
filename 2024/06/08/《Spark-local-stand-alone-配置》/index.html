@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>  《Spark local&amp; stand-alone 配置》 -    white</title>
+  <meta name="description" content="A minimalist theme for hexo.">
+  <!-- 标签页图标 -->
+  
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  
+
+  <!-- 图标库 -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+
+  <!-- css文件 -->
+  
+<link rel="stylesheet" href="/css/white.css">
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400;700;900&family=Roboto+Mono&display=swap" rel="stylesheet">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+
+<div class="menu-outer">
+    <div class="menu-inner">
+        <div class="menu-site-name">
+            <a href="/">
+                white
+            </a>
+        </div>
+        <div class="menu-group">
+            <ul class="menu-ul">
+                
+                <a href="/" class="nav-link">
+                    <li class="menu-li">
+                        首页
+                    </li>
+                </a>
+                
+                <a href="/about" class="nav-link">
+                    <li class="menu-li">
+                        关于
+                    </li>
+                </a>
+                
+                <li class="menu-li" id="mobile-menu">
+                    <i class="ri-menu-line"></i>
+                </li>
+<!--                <li class="menu-li" id="theme-change-btn">-->
+<!--                    默认-->
+<!--                </li>-->
+
+            </ul>
+
+        </div>
+
+    </div>
+</div>
+<!--移动端-->
+<div id="mobile-main">
+    <div class="mobile-menu-inner">
+        <div class="mobile-menu-site-name">
+            <a href="/">
+                white
+            </a>
+        </div>
+        <div class="mobile-menu-group" id="mobile-close">
+            <i class="ri-close-line"></i>
+        </div>
+
+    </div>
+
+    <div class="mobile-menu-div">
+        
+        <a href="/" class="mobile-nav-link">
+            <div class="mobile-menu-child">
+                <span>首页</span>
+            </div>
+        </a>
+        
+        <a href="/about" class="mobile-nav-link">
+            <div class="mobile-menu-child">
+                <span>关于</span>
+            </div>
+        </a>
+        
+    </div>
+
+
+</div>
+
+<div class="body-outer">
+  <div class="body-inner">
+    <article class="post-inner">
+  <div class="post-content-outer">
+    <div class="post-intro">
+      
+      <div class="post-title">
+        《Spark local&amp; stand-alone 配置》
+      </div>
+      <div class="post-meta">
+        <img src="https://cdn.jsdelivr.net/gh/fushaolei/img/20200524104925.jpg">
+        <div class="post-meta-name">fushaolei</div>
+        <div class="post-meta-date">发布于 2024/06/08</div>
+      </div>
+    </div>
+    <div class="post-content-inner common-typographic">
+      <div class="post-placeholder"></div>
+      <div class="post-content-main">
+        <div class="post-content">
+          <h1 id="Spark-StandAlone环境部署"><a href="#Spark-StandAlone环境部署" class="headerlink" title="Spark StandAlone环境部署"></a>Spark StandAlone环境部署</h1><h2 id="新角色-历史服务器"><a href="#新角色-历史服务器" class="headerlink" title="新角色 历史服务器"></a>新角色 历史服务器</h2><blockquote>
+<p>历史服务器不是Spark环境的必要组件, 是可选的.</p>
+</blockquote>
+<blockquote>
+<p>回忆: 在YARN中 有一个历史服务器, 功能: 将YARN运行的程序的历史日志记录下来, 通过历史服务器方便用户查看程序运行的历史信息.</p>
+</blockquote>
+<p>Spark的历史服务器, 功能: 将Spark运行的程序的历史日志记录下来, 通过历史服务器方便用户查看程序运行的历史信息.</p>
+<p>搭建集群环境, 我们一般<code>推荐将历史服务器也配置上</code>, 方面以后查看历史记录<br>​</p>
+<h2 id="集群规划"><a href="#集群规划" class="headerlink" title="集群规划"></a>集群规划</h2><p>课程中 使用三台Linux虚拟机来组成集群环境, 非别是:</p>
+<p>node1\ node2\ node3</p>
+<p>node1运行: Spark的Master进程  和 1个Worker进程</p>
+<p>node2运行: spark的1个worker进程</p>
+<p>node3运行: spark的1个worker进程</p>
+<p>整个集群提供: 1个master进程 和 3个worker进程</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="在所有机器安装Python-Anaconda"><a href="#在所有机器安装Python-Anaconda" class="headerlink" title="在所有机器安装Python(Anaconda)"></a>在所有机器安装Python(Anaconda)</h3><p>参考 附1内容, 如何在Linux上安装anaconda</p>
+<p>同时不要忘记 都创建<code>pyspark</code>虚拟环境 以及安装虚拟环境所需要的包<code>pyspark jieba pyhive</code></p>
+<h3 id="在所有机器配置环境变量"><a href="#在所有机器配置环境变量" class="headerlink" title="在所有机器配置环境变量"></a>在所有机器配置环境变量</h3><p>参考 Local模式下 环境变量的配置内容</p>
+<p><code>确保3台都配置</code></p>
+<h3 id="配置配置文件"><a href="#配置配置文件" class="headerlink" title="配置配置文件"></a>配置配置文件</h3><p>进入到spark的配置文件目录中, <code>cd $SPARK_HOME/conf</code></p>
+<p>配置workers文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">改名, 去掉后面的.template后缀</span></span><br><span class="line">mv workers.template workers</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">编辑worker文件</span></span><br><span class="line">vim workers</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将里面的localhost删除, 追加</span></span><br><span class="line">node1</span><br><span class="line">node2</span><br><span class="line">node3</span><br><span class="line">到workers文件内</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">功能: 这个文件就是指示了  当前SparkStandAlone环境下, 有哪些worker</span></span><br></pre></td></tr></table></figure>
+
+
+<p>配置spark-env.sh文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1. 改名</span></span><br><span class="line">mv spark-env.sh.template spark-env.sh</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2. 编辑spark-env.sh, 在底部追加如下内容</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># 设置JAVA安装目录</span></span></span><br><span class="line">JAVA_HOME=/export/server/jdk</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># HADOOP软件配置文件目录，读取HDFS上文件和运行YARN集群</span></span></span><br><span class="line">HADOOP_CONF_DIR=/export/server/hadoop/etc/hadoop</span><br><span class="line">YARN_CONF_DIR=/export/server/hadoop/etc/hadoop</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># 指定spark老大Master的IP和提交任务的通信端口</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">告知Spark的master运行在哪个机器上</span></span><br><span class="line">export SPARK_MASTER_HOST=node1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">告知sparkmaster的通讯端口</span></span><br><span class="line">export SPARK_MASTER_PORT=7077</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">告知spark master的 webui端口</span></span><br><span class="line">SPARK_MASTER_WEBUI_PORT=8080</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">worker cpu可用核数</span></span><br><span class="line">SPARK_WORKER_CORES=1</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">worker可用内存</span></span><br><span class="line">SPARK_WORKER_MEMORY=1g</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">worker的工作通讯地址</span></span><br><span class="line">SPARK_WORKER_PORT=7078</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">worker的 webui地址</span></span><br><span class="line">SPARK_WORKER_WEBUI_PORT=8081</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># 设置历史服务器</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置的意思是  将spark程序运行的历史日志 存到hdfs的/sparklog文件夹中</span></span><br><span class="line">SPARK_HISTORY_OPTS=&quot;-Dspark.history.fs.logDirectory=hdfs://node1:8020/sparklog/ -Dspark.history.fs.cleaner.enabled=true&quot;</span><br></pre></td></tr></table></figure>
+
+
+<p>注意, 上面的配置的路径 要根据你自己机器实际的路径来写</p>
+<p>在HDFS上创建程序运行历史记录存放的文件夹:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -mkdir /sparklog</span><br><span class="line">hadoop fs -chmod 777 /sparklog</span><br></pre></td></tr></table></figure>
+
+
+<p>配置spark-defaults.conf文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1. 改名</span></span><br><span class="line">mv spark-defaults.conf.template spark-defaults.conf</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2. 修改内容, 追加如下内容</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启spark的日期记录功能</span></span><br><span class="line">spark.eventLog.enabled 	true</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置spark日志记录的路径</span></span><br><span class="line">spark.eventLog.dir	 hdfs://node1:8020/sparklog/ </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置spark日志是否启动压缩</span></span><br><span class="line">spark.eventLog.compress 	true</span><br></pre></td></tr></table></figure>
+
+
+<p>配置log4j.properties 文件 [可选配置]</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1. 改名</span></span><br><span class="line">mv log4j.properties.template log4j.properties</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2. 修改内容 参考下图</span></span><br></pre></td></tr></table></figure>
+
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="E:/Spark/md图/spark.assets/10.jpg" class="lazyload-img">
+        </sapn>
+      </p>
+<blockquote>
+<p>这个文件的修改不是必须的,  为什么修改为WARN. 因为Spark是个话痨</p>
+<p>会疯狂输出日志, 设置级别为WARN 只输出警告和错误日志, 不要输出一堆废话.</p>
+</blockquote>
+<h3 id="将Spark安装文件夹-分发到其它的服务器上"><a href="#将Spark安装文件夹-分发到其它的服务器上" class="headerlink" title="将Spark安装文件夹  分发到其它的服务器上"></a>将Spark安装文件夹  分发到其它的服务器上</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -r spark-3.1.2-bin-hadoop3.2 root@node2:/export/server/</span><br><span class="line">scp -r spark-3.1.2-bin-hadoop3.2 root@node3:/export/server/</span><br></pre></td></tr></table></figure>
+
+
+<p>不要忘记, 在node2和node3上 给spark安装目录增加软链接</p>
+<p><code>ln -s /export/server/spark-3.2.0-bin-hadoop3.2 /export/server/spark</code></p>
+<h3 id="检查"><a href="#检查" class="headerlink" title="检查"></a>检查</h3><p>检查每台机器的:</p>
+<p>JAVA_HOME</p>
+<p>SPARK_HOME</p>
+<p>PYSPARK_PYTHON</p>
+<p>等等 环境变量是否正常指向正确的目录</p>
+<h3 id="启动历史服务器"><a href="#启动历史服务器" class="headerlink" title="启动历史服务器"></a>启动历史服务器</h3><p><code>sbin/start-history-server.sh</code></p>
+<h3 id="启动Spark的Master和Worker进程"><a href="#启动Spark的Master和Worker进程" class="headerlink" title="启动Spark的Master和Worker进程"></a>启动Spark的Master和Worker进程</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动全部master和worker</span></span><br><span class="line">sbin/start-all.sh</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">或者可以一个个启动:</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动当前机器的master</span></span><br><span class="line">sbin/start-master.sh</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动当前机器的worker</span></span><br><span class="line">sbin/start-worker.sh</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">停止全部</span></span><br><span class="line">sbin/stop-all.sh</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">停止当前机器的master</span></span><br><span class="line">sbin/stop-master.sh</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">停止当前机器的worker</span></span><br><span class="line">sbin/stop-worker.sh</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="查看Master的WEB-UI"><a href="#查看Master的WEB-UI" class="headerlink" title="查看Master的WEB UI"></a>查看Master的WEB UI</h3><p>默认端口master我们设置到了8080</p>
+<p>如果端口被占用, 会顺延到8081 …;8082… 8083… 直到申请到端口为止</p>
+<p>可以在日志中查看, 具体顺延到哪个端口上:</p>
+<p><code>Service &#39;MasterUI&#39; could not bind on port 8080. Attempting port 8081.</code><br>​</p>
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="E:/Spark/md图/spark.assets/11.jpg" class="lazyload-img">
+        </sapn>
+      </p>
+<h3 id="连接到StandAlone集群"><a href="#连接到StandAlone集群" class="headerlink" title="连接到StandAlone集群"></a>连接到StandAlone集群</h3><h4 id="bin-pyspark"><a href="#bin-pyspark" class="headerlink" title="bin&#x2F;pyspark"></a>bin&#x2F;pyspark</h4><p>执行:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bin/pyspark --master spark://node1:7077</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">通过--master选项来连接到 StandAlone集群</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果不写--master选项, 默认是<span class="built_in">local</span>模式运行</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sc.parallelize([1,2,3,4,5]).map(lambda x: x + 1).collect()</span><br></pre></td></tr></table></figure>
+
+<p>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="E:/Spark/md图/spark.assets/12.jpg" class="lazyload-img">
+        </sapn>
+      </p>
+<h4 id="bin-spark-shell"><a href="#bin-spark-shell" class="headerlink" title="bin&#x2F;spark-shell"></a>bin&#x2F;spark-shell</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/spark-shell --master spark://node1:7077</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">同样适用--master来连接到集群使用</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 测试代码</span></span><br><span class="line">sc.parallelize(<span class="type">Array</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>)).map(x=&gt; x + <span class="number">1</span>).collect()</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="bin-spark-submit-PI"><a href="#bin-spark-submit-PI" class="headerlink" title="bin&#x2F;spark-submit (PI)"></a>bin&#x2F;spark-submit (PI)</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/spark-submit --master spark://node1:7077 /export/server/spark/examples/src/main/python/pi.py 100</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">同样使用--master来指定将任务提交到集群运行</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="查看历史服务器WEB-UI"><a href="#查看历史服务器WEB-UI" class="headerlink" title="查看历史服务器WEB UI"></a>查看历史服务器WEB UI</h3><p>历史服务器的默认端口是: 18080</p>
+<p>我们启动在node1上, 可以在浏览器打开:</p>
+<p><code>node1:18080</code>来进入到历史服务器的WEB UI上.<br>
+        <span class="lazyload-img-span">
+        <img   
+           data-src="E:/Spark/md图/spark.assets/13.jpg" class="lazyload-img">
+        </sapn>
+      </p>
+<p>zookeeper</p>
+
+        </div>
+      </div>
+      <div class="post-placeholder post-toc-container">
+        <!-- toc -->
+        
+          <!-- tocbot -->
+<nav class="post-toc toc"></nav>
+
+        
+      </div>
+   </div>
+
+    <!-- 评论 -->
+    
+    <div class="bottom-comments-outer">
+      <div class="bottom-comments-inner common-typographic">
+        <h2 class="comment-title">评论</h2>
+        <!-- valine -->
+        
+        <!-- Gitalk -->
+        
+        <!-- livere -->
+        
+        
+        </div>
+      </div>
+    
+  </div>
+</article>
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        tocbot.init({
+            // Where to render the table of contents.
+            tocSelector: '.post-toc',
+            // Where to grab the headings to build the table of contents.
+            contentSelector: '.post-content',
+            // Which headings to grab inside of the contentSelector element.
+            headingSelector: 'h1, h2, h3',
+            // For headings inside relative or absolute positioned containers within content.
+            hasInnerContainers: true,
+        });
+    });
+
+</script>
+<!-- tocbot end -->
+
+  </div>
+</div>
+
+<!-- 如果是home模式的话，不在首页就显示footer，如果不是home模式的话 所有都显示footer -->
+
+  <div class="footer-outer animate__animated  animate__fadeInUp">
+    <div class="footer-inner">
+        <div class="footer-text">
+            <p>Power by <a target="_blank" rel="noopener" href="http://hexo.io/">Hexo</a> Theme by <a target="_blank" rel="noopener" href="https://github.com/FuShaoLei/hexo-theme-white">White</a></p>
+
+        </div>
+        <div class="footer-contact">
+            <ul class="footer-ul">
+                
+                <li class="footer-li">
+                    <a href="https://github.com/FuShaoLei/hexo-theme-white" target="_blank">
+                        <i class="ri-github-line"></i>
+                    </a>
+                </li>
+                
+                <li class="footer-li">
+                    <a href="mailto:1563250958@qq.com" target="_blank">
+                        <i class="ri-mail-line"></i>
+                    </a>
+                </li>
+                
+                <li class="footer-li">
+                    <a href="https://music.163.com/" target="_blank">
+                        <i class="ri-netease-cloud-music-line"></i>
+                    </a>
+                </li>
+                
+                <li class="footer-li">
+                    <a href="https://bilibili.com/" target="_blank">
+                        <i class="ri-bilibili-line"></i>
+                    </a>
+                </li>
+                
+                <li class="footer-li">
+                    <a href="https://youtube.com/" target="_blank">
+                        <i class="ri-youtube-line"></i>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script src="/js/white.js"></script>
+
+
+
+</body>
+</html>
